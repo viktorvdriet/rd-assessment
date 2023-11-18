@@ -1,8 +1,17 @@
 import Form from '@/components/form/form'
 import List from '@/components/list/list'
 import Head from 'next/head'
+import { useState } from 'react';
 
 export default function Home() {
+  const [org, setOrg] = useState('');
+  const [repo, setRepo] = useState('');
+
+  const formSubmitHandler = (org: string, repo: string) => {
+    setOrg(org);
+    setRepo(repo);
+  };
+
   return (
     <>
       <Head>
@@ -12,7 +21,7 @@ export default function Home() {
       </Head>
       <main>
         <h1>GitHub Issue Viewer</h1>
-        <Form />
+        <Form onSubmit={formSubmitHandler} />
         {org && repo && <List org={org} repo={repo} />}
       </main>
     </>
