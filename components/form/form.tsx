@@ -1,3 +1,4 @@
+import { Button, TextField } from '@radix-ui/themes';
 import styles from './form.module.scss'
 
 import { ChangeEvent, FC, FormEvent, useState } from 'react'
@@ -38,8 +39,8 @@ const Form: FC<Props> = ({ onSubmit }) => {
   return (
     <form className={styles.form} onSubmit={submitHandler}>
       <label>Please provide a URL to your public GitHub repo</label>
-      <input type="url" name="url" onChange={changeHandler} defaultValue={data.url} />
-      <button type="submit">Submit</button>
+      <TextField.Input size="3" type="url" name="url" onChange={changeHandler} defaultValue={data.url} />
+      <Button type="submit">Submit</Button>
     </form>
   )
 }
