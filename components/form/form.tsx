@@ -13,7 +13,7 @@ type FormData = {
 
 const Form: FC<Props> = ({ onSubmit }) => {
   const [data, setData] = useState<FormData>({
-    input: "vercel/next.js"
+    input: ""
   });
 
   const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
