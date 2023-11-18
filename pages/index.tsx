@@ -13,7 +13,7 @@ export default function Home() {
       <main>
         <h1>GitHub Issue Viewer</h1>
         <Form />
-        <List />
+        {org && repo && <List org={org} repo={repo} />}
       </main>
     </>
   )
