@@ -14,5 +14,6 @@ export const fetchIssues = async (
     return response.data;
   } catch (error) {
     console.log(error)
+    throw new Error();
   }
 };

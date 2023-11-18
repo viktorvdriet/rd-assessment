@@ -1,0 +1,19 @@
+.issue {
+  animation: fadeIn 500ms;
+}
+
+.title {
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 700px;
+  text-overflow: ellipsis;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

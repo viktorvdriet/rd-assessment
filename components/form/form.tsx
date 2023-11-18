@@ -1,4 +1,4 @@
-import { Button, TextField } from '@radix-ui/themes';
+import { Button, Code, TextField } from '@radix-ui/themes';
 import styles from './form.module.scss'
 
 import { ChangeEvent, FC, FormEvent, useState } from 'react'
@@ -8,12 +8,12 @@ type Props = {
 }
 
 type FormData = {
-  url: string;
+  input: string;
 }
 
 const Form: FC<Props> = ({ onSubmit }) => {
   const [data, setData] = useState<FormData>({
-    url: "https://github.com/vercel/next.js"
+    input: "vercel/next.js"
   });
 
   const changeHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -26,21 +26,19 @@ const Form: FC<Props> = ({ onSubmit }) => {
 
   const submitHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const url = new URL(data.url)
-    const paths = url.pathname.split('/').filter(part => part !== '');
-    const org = paths[0];
-    const repo = paths[1];
-
+    const [org, repo] = data.input.split('/');
     onSubmit(org, repo);
-    setData({ url: '' })
+    setData({ input: '' })
   };
 
   return (
     <form className={styles.form} onSubmit={submitHandler}>
-      <label>Please provide a URL to your public GitHub repo</label>
-      <TextField.Input size="3" type="url" name="url" onChange={changeHandler} defaultValue={data.url} />
-      <Button type="submit">Submit</Button>
+      <label className={styles.label}>
+        Please provide a valid Github Organization & Repo,
+        <span>for example <Code>vercel/next.js</Code></span>
+      </label>
+      <TextField.Input size="3" type="text" name="input" onChange={changeHandler} defaultValue={data.input} />
+      <Button className={styles.button} type="submit">Submit</Button>
     </form>
   )
 }

@@ -1,24 +1,15 @@
 import { useQuery } from 'react-query'
 import styles from './list.module.scss'
 
-import { ExternalLinkIcon } from '@radix-ui/react-icons'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { fetchIssues } from '@/utilities/fetchIssues'
-import { Button, Table } from '@radix-ui/themes'
-import { format, parseISO } from 'date-fns'
+import { Table } from '@radix-ui/themes'
 import { useInView } from 'react-intersection-observer'
+import Issue, { PropsIssue } from '../issue/issue'
 
 type Props = {
   org: string
   repo: string
-}
-
-type PropsIssue = {
-  title: string
-  created_at: string
-  number: number
-  state: string
-  html_url: string
 }
 
 const List: FC<Props> = ({ org, repo }) => {
@@ -26,7 +17,7 @@ const List: FC<Props> = ({ org, repo }) => {
   const [allIssues, setAllIssues] = useState<PropsIssue[]>([]);
 
   const { ref, inView } = useInView({ threshold: 1 })
-  const { data: issues, isLoading, isError, refetch } = useQuery(['issues', org, repo, page], () =>
+  const { data: issues, isLoading, isError, error, refetch } = useQuery(['issues', org, repo, page], () =>
     fetchIssues(org, repo, page)
   );
 
@@ -41,51 +32,51 @@ const List: FC<Props> = ({ org, repo }) => {
   useEffect(() => {
     if (inView && !isLoading) {
       setPage((prevPage: number) => prevPage + 1);
-    }
-  }, [inView, isLoading]);
-
-  useEffect(() => {
-    if (inView && !isLoading) {
       refetch();
     }
   }, [inView, isLoading, refetch]);
 
-  if (isError) return <p>Error fetching issues, please contact your webmaster.</p>
+  useEffect(() => {
+    if (allIssues.length > 0) {
+      console.log(allIssues);
+    }
+  }, [allIssues]);
 
-  console.log(allIssues)
+  if (isError) return <p>Error fetching issues: {(error as Error)?.message}</p>;
 
   return (
     <>
-      <Table.Root variant="surface">
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeaderCell>No.</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Date</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>State</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Link</Table.ColumnHeaderCell>
-          </Table.Row>
-        </Table.Header>
+      {allIssues.length > 0 && (
+        <Table.Root variant="surface" className={styles.list}>
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeaderCell>No.</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Date</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>State</Table.ColumnHeaderCell>
+              <Table.ColumnHeaderCell>Link</Table.ColumnHeaderCell>
+            </Table.Row>
+          </Table.Header>
 
-        <Table.Body>
-          {allIssues.map((issue: PropsIssue, key: number) => {
-            const date = format(parseISO(issue.created_at), 'dd MMM yyyy');
-
-            return (
-              <Table.Row key={`issue-${key}`}>
-                <Table.RowHeaderCell>{`#${issue.number}`}</Table.RowHeaderCell>
-                <Table.Cell>{date}</Table.Cell>
-                <Table.Cell>{issue.state}</Table.Cell>
-                <Table.Cell>{issue.title}</Table.Cell>
-                <Table.Cell><a href={issue.html_url} target="_blank"><ExternalLinkIcon /></a></Table.Cell>
-              </Table.Row>
-            )
-          })}
-        </Table.Body>
-      </Table.Root>
+          <Table.Body>
+            {allIssues.map((issue: PropsIssue, key: number) => {
+              return (
+                <Issue
+                  key={`issue-${key}`}
+                  number={issue.number}
+                  created_at={issue.created_at}
+                  state={issue.state}
+                  title={issue.title}
+                  html_url={issue.html_url}
+                />
+              )
+            })}
+          </Table.Body>
+        </Table.Root >
+      )}
 
       <div ref={ref}>
-        Loading...
+        {!isLoading && "Loading..."}
       </div>
     </>
   )
