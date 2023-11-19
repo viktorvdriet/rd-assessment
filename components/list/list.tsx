@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query'
 import styles from './list.module.scss'
 
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { fetchIssues } from '@/utilities/fetchIssues'
 import { Table } from '@radix-ui/themes'
 import { useInView } from 'react-intersection-observer'
@@ -36,11 +36,13 @@ const List: FC<Props> = ({ org, repo }) => {
     }
   }, [inView, isLoading, refetch]);
 
-  useEffect(() => {
-    if (allIssues.length > 0) {
-      console.log(allIssues);
-    }
-  }, [allIssues]);
+  // Debugging purposes
+
+  // useEffect(() => {
+  //   if (allIssues.length > 0) {
+  //     console.log(allIssues);
+  //   }
+  // }, [allIssues]);
 
   if (isError) return <p>Error fetching issues: {(error as Error)?.message}</p>;
 

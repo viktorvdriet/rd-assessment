@@ -1,3 +1,5 @@
+@import "@/styles/_helpers.scss";
+
 .issue {
   animation: fadeIn 500ms;
 }
@@ -7,13 +9,16 @@
   white-space: nowrap;
   max-width: 700px;
   text-overflow: ellipsis;
-}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+  @include breakpoint("laptop") {
+    max-width: 560px;
   }
-  to {
-    opacity: 1;
+
+  @include breakpoint("tablet") {
+    max-width: 260px;
+  }
+
+  @include breakpoint("mobile") {
+    max-width: 100px;
   }
 }

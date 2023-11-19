@@ -34,8 +34,7 @@ const Form: FC<Props> = ({ onSubmit }) => {
   return (
     <form className={styles.form} onSubmit={submitHandler}>
       <label className={styles.label}>
-        Please provide a valid Github Organization & Repo,
-        <span>for example <Code>vercel/next.js</Code></span>
+        Please provide a valid Github Organization & Repo, for example <Code>vercel/next.js</Code>
       </label>
       <TextField.Input size="3" type="text" name="input" onChange={changeHandler} defaultValue={data.input} />
       <Button className={styles.button} type="submit">Submit</Button>

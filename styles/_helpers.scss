@@ -1,0 +1,26 @@
+// Breakpoints
+$screen-sizes: (
+  mobile-s: 375px,
+  mobile: 480px,
+  tablet: 768px,
+  laptop: 1024px,
+  laptop-l: 1440px,
+  desktop: 1600px,
+);
+
+// Breakpoint mixin
+@mixin breakpoint($media) {
+  @media only screen and (max-width: map-get($screen-sizes, $media)) {
+    @content;
+  }
+}
+
+// Fade in animation
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
